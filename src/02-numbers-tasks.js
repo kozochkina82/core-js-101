@@ -54,7 +54,10 @@ function getCircleCircumference(radius) {
  *  -3, 3  => 0
  */
 function getAverage(value1, value2) {
-  return (value1 + value2) / 2;
+  if (typeof value1 !== 'number' || typeof value2 !== 'number') {
+    throw new Error('Оба аргумента должны быть числами');
+  }
+  return value1 / 2 + value2 / 2;
 }
 
 /**
@@ -116,10 +119,14 @@ function getLinearEquationRoot(a, b) {
  *   (0,1) (1,2)     => 0
  */
 function getAngleBetweenVectors(x1, y1, x2, y2) {
-  const sqrt1 = Math.sqrt((x1 ** 2) + (x2 ** 2));
-  const sqrt2 = Math.sqrt((y1 ** 2) + (y2 ** 2));
-  const getAngle = Math.acos((x1 * y1 + x2 * y2) / (sqrt1 * sqrt2));
-  return getAngle;
+  const length1 = Math.sqrt(x1 ** 2 + y1 ** 2);
+  const length2 = Math.sqrt(x2 ** 2 + y2 ** 2);
+
+  const dotProduct = x1 * x2 + y1 * y2;
+
+  const angle = Math.acos(dotProduct / (length1 * length2));
+
+  return angle;
 }
 
 /**
@@ -135,7 +142,7 @@ function getAngleBetweenVectors(x1, y1, x2, y2) {
  *     0     => 0
  */
 function getLastDigit(value) {
-  return `${value[value.length - 1]}`;
+  return Math.abs(value) % 10;
 }
 
 
@@ -151,7 +158,7 @@ function getLastDigit(value) {
  * '-525.5'     => -525.5
  */
 function parseNumberFromString(value) {
-  return parseInt(value, 10);
+  return parseFloat(value);
 }
 
 /**
@@ -211,18 +218,22 @@ function roundToPowerOfTen(num, pow) {
  *   17 => true
  */
 function isPrime(n) {
-  if (n < 2) {
-    if (n === 2 || n === 3) {
-      return true;
-    } let i = 2;
-    const limit = Math.sqrt(n);
-    while (i <= limit) {
-      i += 1;
-      if (n % i !== 0) {
-        return true;
-      } return false;
+  if (n <= 1) {
+    return false;
+  }
+  if (n === 2) {
+    return true;
+  }
+  if (n % 2 === 0) {
+    return false;
+  }
+  const limit = Math.sqrt(n);
+  for (let i = 3; i <= limit; i += 2) { // Проверяем только нечётные делители
+    if (n % i === 0) {
+      return false;
     }
-  } return false;
+  }
+  return true;
 }
 
 /**
@@ -241,8 +252,9 @@ function isPrime(n) {
  *   toNumber(new Number(42), 0) => 42
  */
 function toNumber(value, def) {
-  const number = value.parseInt();
-  if (typeof number === 'number') {
+  const number = Number(value);
+
+  if (typeof number === 'number' && !Number.isNaN(number)) {
     return number;
   }
   return def;

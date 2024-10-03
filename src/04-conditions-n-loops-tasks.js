@@ -51,8 +51,11 @@ function getFizzBuzz(num) {
  *   10 => 3628800
  */
 function getFactorial(n) {
-  const factorial = Math.abs(Math.sqrt(2 * Math.PI * n) * (n ** n) * (Math.E ** (-n)));
-  return factorial;
+  let result = 1;
+  for (let i = 2; i <= n; i += 1) {
+    result *= i;
+  }
+  return result;
 }
 
 
@@ -128,8 +131,15 @@ function isTriangle(a, b, c) {
  *   { top:20, left:20, width: 20, height: 20 }    =>  false
  *
  */
-function doRectanglesOverlap(/* rect1, rect2 */) {
-  throw new Error('Not implemented');
+function doRectanglesOverlap(rect1, rect2) {
+  const noOvrlpX = rect1.left + rect1.width <= rect2.left || rect2.left + rect2.width <= rect1.left;
+
+  const noOvrlpY = rect1.top + rect1.height <= rect2.top || rect2.top + rect2.height <= rect1.top;
+
+  if (noOvrlpX || noOvrlpY) {
+    return false;
+  }
+  return true;
 }
 
 
@@ -159,8 +169,13 @@ function doRectanglesOverlap(/* rect1, rect2 */) {
  *   { center: { x:0, y:0 }, radius:10 },  { x:10, y:10 }   => false
  *
  */
-function isInsideCircle(/* circle, point */) {
-  throw new Error('Not implemented');
+function isInsideCircle(circle, point) {
+  const diff1 = (point.x - circle.center.x) ** 2;
+  const diff2 = (point.y - circle.center.y) ** 2;
+  const way = Math.sqrt(diff1 + diff2);
+  if (way < circle.radius) {
+    return true;
+  } return false;
 }
 
 
